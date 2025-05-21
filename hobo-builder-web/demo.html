@@ -1,0 +1,61 @@
+<!doctype HTML>
+<html>
+        <head>
+                <title>hobo-builder-web Layout Test</title>
+                <link id="layout" href="wide_style.css" rel="stylesheet" />
+                <script type="module" src="./main.js"></script>
+        </head>
+        <body>
+                <datalist id="card_names">
+                        <!-- This datalist is generated at page load from
+                        the latest price data. -->
+                </datalist>
+                <section id="deck_container">
+                        <div class="header deck">
+                                <h1>Deck</h1>
+                                <div class="summary deck">
+                                        <div class="summary row">
+                                                <sup class="count deck">0</sup>/<sub>60</sub> cards
+                                        </div>
+                                        <div class="summary row">
+                                                <sup class="price deck">$0.00</sup>/<sub>$20.00</sub>
+                                        </div>
+                                </div>
+                        </div>
+                        <form class="card_form">
+                                <div class="form_row deck add_button">
+                                        <button class="card_add_button"
+                                                onclick="deck.addEntry()"
+                                                type="button">
+                                                Add Card
+                                        </button>
+                                </div>
+                        </form>
+                </section>
+                <section id="sideboard_container">
+                        <div class="header sideboard">
+                                <h1>Sideboard</h1>
+                                <div class="summary sideboard">
+                                        <div class="summary row">
+                                                <sup class="count sideboard">0</sup>/<sub>15</sub> cards
+                                        </div>
+                                        <div class="summary row">
+                                                <sup class="price sideboard">$0.00</sup>/<sub>$5.00</sub>
+                                        </div>
+                                </div>
+                        </div>
+                        <form class="card_form">
+                                <div class="form_row sideboard add_button">
+                                        <button class="card_add_button"
+                                                onclick="sideboard.addEntry()"
+                                                type="button">
+                                                Add Card
+                                        </button>
+                                </div>
+                        </form>
+                </section>
+                <section id="info_container">
+                        <h1>Info</h1>
+                </section>
+        </body>
+<html>

@@ -1,0 +1,70 @@
+body {
+        display: flex;
+}
+
+section {
+        width: calc((100% / 3) - 2%);
+        margin: 0 1%
+}
+
+.card_form {
+        width: 100%;
+        display: table;
+}
+
+.form_row {
+        width: 100%;
+        display: flex;
+        flex-wrap: no-wrap;
+        padding: 0.2lh 0;
+        border-top: thin solid black;
+}
+
+.card_count_input {
+        width: 2.5lh;
+}
+
+.card_name_input {
+        width: calc(100% - 9lh);
+        margin: 0 0.25lh;
+        border: none;
+}
+
+.card_caption {
+        width: 100%;
+        border-top: thin solid lightgrey;
+        font-size:80%;
+}
+
+.card_del_button {
+        text-align: center;
+        width: 6lh;
+}
+
+.card_add_button {
+        text-align: center;
+}
+
+.header {
+        display: flex;
+}
+
+h1 {
+        font-size: 150%;
+        width: 25%;
+}
+
+.summary {
+        width: 75%;
+        font-weight: bold;
+        text-align: right;
+        display: flex;
+        flex-direction: column;
+        wrap: none;
+}
+
+.summary.row {
+        display: inline;
+        width: 100%;
+        height: 50%;
+}
