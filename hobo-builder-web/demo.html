@@ -55,7 +55,17 @@
                         </form>
                 </section>
                 <section id="info_container">
-                        <h1>Info</h1>
+                        <h1>Options</h1>
+                        <button class="copy"
+                                onclick="copyToClipboard(deck, sideboard)"
+                                type="button">
+                                Copy deck to clipboard
+                        </button>
+                        <button class="paste"
+                                onclick="pasteFromClipboard(deck, sideboard)"
+                                type="button">
+                                Load deck from clipboard
+                        </button>
                 </section>
         </body>
 <html>

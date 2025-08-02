@@ -1,5 +1,7 @@
 /**
  * Documentation to come later lol...
+ * TODO: add time last saved and maybe warnings
+ * TODO: organize, document, clean up
  */
 
 class PriceEntry {
@@ -24,7 +26,9 @@ class List {
         currentCards() {
                 let c = 0;
                 for (const entry of this.entries) {
-                        c += Number(entry.count);
+                        if (entry !== undefined) {
+                                c += Number(entry.count);
+                        }
                 }
                 return c;
         }
@@ -32,7 +36,10 @@ class List {
         currentPrice() {
                 let p = 0;
                 for (const entry of this.entries) {
-                        p += entry.totalPrice();
+                        if (entry !== undefined) {
+                                const fudged_price = entry.totalPrice();
+                                p += fudged_price < 0 ? 0 : fudged_price;
+                        }
                 }
                 return p;
         }
@@ -109,6 +116,7 @@ class List {
                 
                 this.DOM[index].childNodes[1].textContent = caption;
                 this.updateHeader();
+
         }
 
         // Returns the line of text that is displayed under the input box that
@@ -126,8 +134,7 @@ class List {
                 return string;
         }
 
-        // TODO: add eventListeners
-        addEntry() {
+        addEntry(count = undefined, name = undefined) {
                 const index = this.entries.length;
 
                 // Add a new entry to the internal list representation.
@@ -150,7 +157,11 @@ class List {
                 card_count_input.type = "number";
                 card_count_input.min = "0";
                 card_count_input.classList.add("card_count_input");
-                card_count_input.setAttribute("value", 0);
+                if (count !== undefined && count !== NaN) {
+                        card_count_input.setAttribute("value", count);
+                } else {
+                        card_count_input.setAttribute("value", 0);
+                }
                 card_count_input.setAttribute(
                         "onchange",
                         `${this.name}.updateEntry(${index})`
@@ -162,8 +173,11 @@ class List {
                 card_name_input.type = "text";
                 card_name_input.classList.add("card_name_input");
                 card_name_input.setAttribute("list", "card_names");
-                card_name_input.placeholder = "Card name...";
-                // onchange
+                if (name !== undefined) {
+                        card_name_input.value = name;
+                } else {
+                        card_name_input.placeholder = "Card name...";
+                }
                 card_name_input.setAttribute(
                         "onchange",
                         `${this.name}.updateEntry(${index})`
@@ -194,6 +208,11 @@ class List {
                 document.querySelector(
                         `div.${this.name}.add_button`
                 ).before(entry);
+
+                // Update entry if initial values have been added.
+                if (count !== undefined || name !== undefined) {
+                        this.updateEntry(index);
+                }
         }
 
         // Removes a price entry from both memory and the DOM.
@@ -203,8 +222,11 @@ class List {
                 
                 this.DOM[index].remove();
                 delete this.DOM[index];
+
+                this.updateHeader();
         }
 
+        // Updates the section headers' fraction displays.
         updateHeader() {
                 document.querySelector(
                         `sup.count.${this.name}`
@@ -256,7 +278,66 @@ class Price {
         }
 }
 
+async function copyToClipboard(deck, sideboard) {
+        
+        function lines(list) {
+                let str = ""
+                for (const entry of list.entries) {
+                        if (entry !== undefined) {
+                                str += `${entry.count} ${entry.name}\n`;
+                        }
+                }
+                return str;
+        }
+
+        let str = lines(deck);
+        str += "\n"
+        str += lines(sideboard);
+        
+        try {
+                await navigator.clipboard.writeText(str);
+        } catch (error) {
+                console.error(error.message);
+        }
+}
+
+async function pasteFromClipboard(deck, sideboard) {
+        
+        function addEntries(str, list) {
+
+                const lines = str.split("\n");
+                for (const l of lines) {
+                        if (l === "") {
+                                break;
+                        }
+
+                        const i = l.indexOf(" ");
+                        const count = Number(l.slice(0, i));
+                        const name = l.slice(i + 1);
+
+                        list.addEntry(count, name);
+                }
+        }
+
+        let str;
+
+        try {
+                str = await navigator.clipboard.readText();
+        } catch (error) {
+                console.error(error.message);
+                return;
+        }
+        
+        const parts = str.split("\n\n");
+
+        addEntries(parts[0], deck);
+        addEntries(parts[1], sideboard);
+}
+
 // ---- RUNTIME SCRIPT BEGINS HERE ----
+
+window.copyToClipboard = copyToClipboard;
+window.pasteFromClipboard = pasteFromClipboard;
 
 window.deck = new List("deck");
 window.sideboard = new List("sideboard");
